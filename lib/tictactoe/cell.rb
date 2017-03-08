@@ -3,8 +3,8 @@ module Tictactoe
 
 		attr_accessor :piece
 
-		def initialize (piece = " ")
-			@piece = piece
+		def initialize
+			@piece = " "
 		end
 
 	end

@@ -15,7 +15,7 @@ module Tictactoe
 		end
 
 		def playPiece(position,piece)
-			getCell(position).piece=piece
+			getCell(position).piece = piece
 		end
 
 # ================== END GAME ====================

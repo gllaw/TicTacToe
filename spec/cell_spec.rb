@@ -4,14 +4,16 @@ module Tictactoe
   describe Cell do
   	
   	describe "#initialize" do
-      it "is initialized with a value of " " by default" do
+      it "is initialized with a " " piece by default" do
         cell = Cell.new
         expect(cell.piece).to eq " "
       end
-      it "can be initialized with a value of 'X'" do
-  			cell = Cell.new("X")
-  			expect(cell.piece).to eq "X"
-			end
+
+      it "can be overridden with another piece" do
+        cell = Cell.new
+        cell.piece = "X"
+        expect(cell.piece).to eq "X"
+      end
     end
   
   end

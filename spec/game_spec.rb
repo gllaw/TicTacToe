@@ -30,27 +30,34 @@ module Tictactoe
     	end
     end
 
-    context "#play" do
-    	it "puts a message if it detects a winner" do
-    		game = Game.new
-    		game.stub(:currentPlayer){game.human}
-    		game.board.stub(:gameOver){:winner}
-    		expect(game.play).to eq "Os won."
-    	end
-    	it "puts a message if it detects a tie" do
-    		game = Game.new
-    		game.stub(:currentPlayer){game.human}
-    		game.board.stub(:gameOver){:tied}
-    		expect(game.play).to eq "Draw."
-    	end
-    end
+    # context "#play" do
+    # 	it "puts a message if it detects a winner" do
+    # 		game = Game.new
+    # 		game.stub(:currentPlayer){game.human}
+    # 		game.board.stub(:gameOver){:winner}
+    # 		expect(game.play).to eq "Os won."
+    # 	end
+    # 	it "puts a message if it detects a tie" do
+    # 		game = Game.new
+    # 		game.stub(:currentPlayer){game.human}
+    # 		game.board.stub(:gameOver){:tied}
+    # 		expect(game.play).to eq "Draw."
+    # 	end
+    # end
 
     # context "#humanMove" do
+    #   before do 
+    #     @var = String.new("5")
+    #   end
     # 	it "gets the move and checks that it is a valid selection" do
     # 		game = Game.new
-    # 		move = 5
-    # 		game.board.stub(:move){" "}
-    # 		expect(game.humanMove).to eq "humanTaken: [5]"
+    #     grid = [" "," "," "," "," "," "," "," "," "]
+    #     game.board = Board.new(grid: grid)
+    #     currentPlayer = Player.new
+    # 		move = @var.chomp.to_i
+    #     game.board.stub(:move,currentPlayer.piece)
+    # 		expect(game.board.grid).to eq [" "," "," "," "," ","O"," "," "," "]
+    #     # "humanTaken: [5]"
     # 	end
     	
     # end
