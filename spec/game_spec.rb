@@ -30,37 +30,50 @@ module Tictactoe
     	end
     end
 
-    # context "#play" do
-    # 	it "puts a message if it detects a winner" do
-    # 		game = Game.new
-    # 		game.stub(:currentPlayer){game.human}
-    # 		game.board.stub(:gameOver){:winner}
-    # 		expect(game.play).to eq "Os won."
-    # 	end
-    # 	it "puts a message if it detects a tie" do
-    # 		game = Game.new
-    # 		game.stub(:currentPlayer){game.human}
-    # 		game.board.stub(:gameOver){:tied}
-    # 		expect(game.play).to eq "Draw."
-    # 	end
-    # end
+    context "#play" do
+    	it "puts a message if it detects a winner" do
+    		game = Game.new
+    		game.stub(:currentPlayer){game.human}
+    		game.board.stub(:gameOver){:winner}
+    		expect(game.play).to eq "Os won."
+    	end
+    	it "puts a message if it detects a tie" do
+    		game = Game.new
+    		game.stub(:currentPlayer){game.human}
+    		game.board.stub(:gameOver){:tied}
+    		expect(game.play).to eq "Draw."
+    	end
+    end
 
     # context "#humanMove" do
     #   before do 
-    #     @var = String.new("5")
+    #     $var = String.new("5")
     #   end
     # 	it "gets the move and checks that it is a valid selection" do
     # 		game = Game.new
     #     grid = [" "," "," "," "," "," "," "," "," "]
     #     game.board = Board.new(grid: grid)
-    #     currentPlayer = Player.new
-    # 		move = @var.chomp.to_i
-    #     game.board.stub(:move,currentPlayer.piece)
-    # 		expect(game.board.grid).to eq [" "," "," "," "," ","O"," "," "," "]
+    #     currentPlayer = @human
+    # 		# move = $var.chomp.to_i
+    #     game.humanMove
+    # 		expect(game.humanMove).to eq [" "," "," "," "," ","O"," "," "," "]
     #     # "humanTaken: [5]"
     # 	end
-    	
     # end
+
+    context "#cpuMove" do
+      it "places the X piece on the board" do
+        TestCell = Struct.new(:piece)
+        grid = [TestCell.new(" "),TestCell.new(" "),TestCell.new(" "),TestCell.new(" "),TestCell.new(" "),TestCell.new(" "),TestCell.new(" "),TestCell.new(" "),TestCell.new(" ")]
+        game = Game.new
+        game.board = Board.new(grid: grid)
+        currentPlayer = Player.new
+        currentPlayer.piece = "X"
+        move = 3
+        game.board.stub(move,currentPlayer.piece)
+        expect(game.cpuMove).to eq [TestCell.new(" "),TestCell.new(" "),TestCell.new(" "),TestCell.new("X"),TestCell.new(" "),TestCell.new(" "),TestCell.new(" "),TestCell.new(" "),TestCell.new(" ")]
+      end
+    end
 
   end
 end

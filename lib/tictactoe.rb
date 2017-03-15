@@ -1,4 +1,3 @@
-require_relative "tictactoe/version"
 require_relative "./tictactoe/cell.rb"
 require_relative "./tictactoe/player.rb"
 require_relative "./tictactoe/board.rb"
@@ -65,30 +64,32 @@ module Tictactoe
     	puts "Enter 0-8 to place your O piece:"
     	move = gets.chomp.to_i
     	if move.between?(0,8) && @board.getCell(move).piece == " "
-	      # @humanTaken << move
+	      @humanTaken << move
 	      @board.playPiece(move, @currentPlayer.piece)
-	      # return
+        # return @humanTaken.to_a
 	    else
 	      puts "Invalid, try again." + "\n" + "Enter 0-8 to place your O piece:"
 	      humanMove
 	    end
 		end
 
-		# def cpuMove
-		# 	if @board.grid.all?{|cell| cell.piece == " "}
-		# 		move = rand(0..8)
-		# 		@board.playPiece(move,"X")
-		# 	else
-		# 		move = @board.findNonLosingMove
-		# 		if @board.getCell(move).piece == " "
-		# 			@board.playPiece(move,"X")
-		# 			puts "Computer just placed an X in position #{move}."
-		# 		else
-		# 			puts "WHOOPS something broke. Restarting game."
-	 #        play
-	 #      end
-		# 	end
-		# end
+		def cpuMove
+			if @board.grid.all?{|cell| cell.piece == " "}
+				# move = rand(0..8)
+        move = 3
+				@board.playPiece(move,@currentPlayer.piece)
+        return @board.grid
+			# else
+			# 	move = @board.findNonLosingMove
+			# 	if @board.getCell(move).piece == " "
+			# 		@board.playPiece(move,"X")
+			# 		puts "Computer just placed an X in position #{move}."
+			# 	else
+			# 		puts "WHOOPS something broke. Restarting game."
+	  #       play
+	  #     end
+			end
+		end
 
   end
 end

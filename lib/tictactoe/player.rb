@@ -3,8 +3,7 @@ module Tictactoe
 		attr_reader :name
 		attr_accessor :piece
 
-		def initialize#(input)
-			# @name = input.fetch(:name).chomp
+		def initialize
 			@piece = "O"
 		end
 
