@@ -25,118 +25,114 @@ module Tictactoe
 		    expect(board.grid).to eq "blah"
 		  end
 		end
+
+		context "#win_patterns" do
+		  it "returns the win_patterns as arrays inside an array" do
+		    board = Board.new
+		    expect($win_patterns).to eq([[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]])
+		  end
+		end
  
- 		context "#getCell" do
+ 		context "#get_cell" do
 		  it "returns the cell based on the position" do
 		    grid = [" "," "," "," ","X"," "," "," "," "]
 		    board = Board.new(grid: grid)
-		    expect(board.getCell(4)).to eq "X"
+		    expect(board.get_cell(4)).to eq "X"
 		  end
 		end
 
-		context "#playPiece" do
+		context "#play_piece" do
 		  it "sets the value of the cell at position given" do
 		    TestCell = Struct.new(:piece)
 		    grid = [" ", " ", " ", " ", TestCell.new("something"), " ", " ", " ", " ", " "]
 		    board = Board.new(grid: grid)
-		    board.playPiece(4, "O")
-		    expect(board.getCell(4).piece).to eq "O"
+		    board.play_piece(4, "O")
+		    expect(board.get_cell(4).piece).to eq "O"
 		  end
 		end
 
-		context "#gameOver" do
-		  it "returns :winner if winningGame? is true" do
+		context "#game_over" do
+		  it "returns :winner if winning_game? is true" do
 		    board = Board.new
-		    board.stub(:winningGame?){true}
-		    expect(board.gameOver).to eq :winner
+		    board.stub(:winning_game?){true}
+		    expect(board.game_over).to eq :winner
 		  end
-		 
-		  it "returns :draw if winningGame? is false and tiedGame? is true" do
+		  it "returns :tied if winning_game? is false and tied_game? is true" do
 		    board = Board.new
-		    board.stub(:winningGame?){false}
-		    board.stub(:tiedGame?){true}
-		    expect(board.gameOver).to eq :tied
+		    board.stub(:winning_game?){false}
+		    board.stub(:tied_game?){true}
+		    expect(board.game_over).to eq :tied
 		  end
-		 
-		  it "returns false if winningGame? is false and tiedGame? is false" do
+		  it "returns false if winning_game? is false and tied_game? is false" do
 		    board = Board.new
-		    board.stub(:winningGame?){false}
-		    board.stub(:tiedGame?){false}
-		    expect(board.gameOver).to be false
+		    board.stub(:winning_game?){false}
+		    board.stub(:tied_game?){false}
+		    expect(board.game_over).to be false
 		  end
 		end
 
-		context "#tiedGame?" do
+		context "#tied_game?" do
 			it "returns false if grid contains a blank" do
 				TestCell = Struct.new(:piece)
 		  	grid = [TestCell.new(" "), TestCell.new("something"), TestCell.new("something"), TestCell.new("something"), TestCell.new("something"), TestCell.new(" "), TestCell.new(" "), TestCell.new("something"), TestCell.new("something")]
 		  	board = Board.new(grid: grid)
-		    expect(board.tiedGame?).to be false
+		    expect(board.tied_game?).to be false
 		  end
 		  it "returns true if grid does not contain a blank piece" do
 		  	TestCell = Struct.new(:piece)
 		  	grid = [TestCell.new("something"), TestCell.new("something"), TestCell.new("something"), TestCell.new("something"), TestCell.new("something"), TestCell.new("something"), TestCell.new("something"), TestCell.new("something"), TestCell.new("something")]
 		  	board = Board.new(grid: grid)
-		    expect(board.tiedGame?).to be true
+		    expect(board.tied_game?).to be true
 		  end
 		end
 
-		context "#winningGame?" do
-			it "returns false if no winPattern filled" do
+		context "#winning_game?" do
+			it "returns false if no win_pattern filled" do
 				TestCell = Struct.new(:piece)
 				grid = [TestCell.new("X"),TestCell.new("O"),TestCell.new("X"),TestCell.new("X"),TestCell.new("O"),TestCell.new("O"),TestCell.new("O"),TestCell.new("X"),TestCell.new("X")]
 				board = Board.new(grid: grid)
-				expect(board.winningGame?).to be false
+				expect(board.winning_game?).to be false
 			end
-			it "returns true if a winPattern is filled by all Xs" do
+			it "returns true if a win_pattern is filled by all Xs" do
 				TestCell = Struct.new(:piece)
 				grid = [TestCell.new("X"),TestCell.new("O"),TestCell.new(" "),TestCell.new(" "),TestCell.new("X"),TestCell.new(" "),TestCell.new(" "),TestCell.new("O"),TestCell.new("X")]
 				board = Board.new(grid: grid)
-				expect(board.winningGame?).to be true
+				expect(board.winning_game?).to be true
 			end
 		end
 
 		TestCell = Struct.new(:piece)
-		let(:xCell){TestCell.new("X")}
-		let(:oCell){TestCell.new("O")}
-		let(:blankCell){TestCell.new(" ")}
+		let(:x_cell){TestCell.new("X")}
+		let(:o_cell){TestCell.new("O")}
+		let(:blank_cell){TestCell.new(" ")}
 
-		context "#gameOver" do
-			it "returns :winner when a winPattern is filled by all Os" do
-				grid = [oCell, oCell, oCell, blankCell, blankCell, blankCell, blankCell, blankCell, blankCell,]
+		context "#game_over" do
+			it "returns :winner when a win_pattern is filled by all Os" do
+				grid = [o_cell, o_cell, o_cell, blank_cell, blank_cell, blank_cell, blank_cell, blank_cell, blank_cell]
 				board = Board.new(grid: grid)
-				expect(board.gameOver).to eq :winner
+				expect(board.game_over).to eq :winner
 			end
-			it "returns :winner when a winPattern is filled by all Xs" do
-				grid = [xCell, blankCell, blankCell, blankCell, xCell, blankCell, blankCell, blankCell, xCell,]
+			it "returns :winner when a win_pattern is filled by all Xs" do
+				grid = [x_cell, blank_cell, blank_cell, blank_cell, x_cell, blank_cell, blank_cell, blank_cell, x_cell,]
 				board = Board.new(grid: grid)
-				expect(board.gameOver).to eq :winner
+				expect(board.game_over).to eq :winner
 			end
-			it "returns false when a winPattern is filled by all blanks" do
-				grid = [xCell, oCell, blankCell, oCell, xCell, blankCell, xCell, oCell, blankCell,]
+			it "returns false when a win_pattern is filled by all blanks" do
+				grid = [x_cell, o_cell, blank_cell, o_cell, x_cell, blank_cell, x_cell, o_cell, blank_cell,]
 				board = Board.new(grid: grid)
-				expect(board.gameOver).to be false
+				expect(board.game_over).to be false
 			end
 			it "returns :tied when there are no blanks left on the board" do
-				grid = [xCell,oCell,xCell,xCell,oCell,oCell,oCell,xCell,xCell]
+				grid = [x_cell,o_cell,x_cell,x_cell,o_cell,o_cell,o_cell,x_cell,x_cell]
 				board = Board.new(grid: grid)
-				expect(board.gameOver).to eq :tied
+				expect(board.game_over).to eq :tied
 			end
 			it "returns false when there's no winner yet nor is the game a tie" do
-				grid = [xCell, oCell, oCell, oCell, xCell, oCell, xCell, oCell, blankCell,]
+				grid = [x_cell, o_cell, o_cell, o_cell, x_cell, o_cell, x_cell, o_cell, blank_cell,]
 				board = Board.new(grid: grid)
-				expect(board.gameOver).to be false 
+				expect(board.game_over).to be false 
 			end
 		end
-
-# ============ FOR FINDING CPU MOVE ==============
-		# context "#findNonLosingMove" do
-		# 	it "chooses the last empty spot of a winning pattern filled with 2 other Xs" do
-		# 		grid = [xCell, oCell, blankCell, blankCell, blankCell, blankCell. blankCell, oCell, xCell]
-		# 		board = Board.new(grid: grid)
-		# 		expect(board.findNonLosingMove.var).to eq 4
-		# 	end
-		# end
 
   end
 end

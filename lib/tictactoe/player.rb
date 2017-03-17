@@ -1,10 +1,9 @@
 module Tictactoe
 	class Player
-		attr_reader :name
 		attr_accessor :piece
 
-		def initialize
-			@piece = "O"
+		def initialize(piece = "O")
+			@piece = piece
 		end
 
 	end

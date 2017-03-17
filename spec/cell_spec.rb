@@ -9,10 +9,10 @@ module Tictactoe
         expect(cell.piece).to eq " "
       end
 
-      it "can be overridden with another piece" do
+      it "can be overridden with another value for piece" do
         cell = Cell.new
-        cell.piece = "X"
-        expect(cell.piece).to eq "X"
+        cell.piece = "turtle"
+        expect(cell.piece).to eq "turtle"
       end
     end
   

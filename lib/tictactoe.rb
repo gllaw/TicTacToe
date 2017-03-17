@@ -1,94 +1,107 @@
 require_relative "./tictactoe/cell.rb"
 require_relative "./tictactoe/player.rb"
 require_relative "./tictactoe/board.rb"
+require_relative "./tictactoe/computer.rb"
 
 module Tictactoe
   class Game
 
-  	attr_reader :human
-  	attr_accessor :board, :cpu, :currentPlayer, :waitingPlayer, :humanTaken
+  	attr_accessor :board, :cpu, :human, :current_player, :waiting_player
 
   	def initialize
-  		@board = Board.new
-  		@human = Player.new
-  		@humanTaken = Array.new
-  		@cpu = Player.new
-  		@cpu.piece = "X"
+  		$board = Board.new
+  		$human = Player.new
+  		$cpu = Computer.new
   		if rand(1..2) == 1
-  			@currentPlayer = @human
-  			@waitingPlayer = @cpu
+  			@current_player = $human
+  			@waiting_player = $cpu
   		elsif rand(1..2) == 2
-  			@currentPlayer = @cpu
-  			@waitingPlayer = @human
+  			@current_player = $cpu
+  			@waiting_player = $human
   		end
   	end
 
-  	def nextTurn
-  		var = @currentPlayer
-  		@currentPlayer = @waitingPlayer
-  		@waitingPlayer = var
+  	def next_turn
+  		var = @current_player
+  		@current_player = @waiting_player
+  		@waiting_player = var
   	end
 
-  	def putsBoard
-	    puts "#{@board.getCell(0).piece}" + " | " + "#{@board.getCell(1).piece}" + " | " + "#{@board.getCell(2).piece}"
+  	def puts_board
+	    puts "#{$board.get_cell(0).piece}" + " | " + "#{$board.get_cell(1).piece}" + " | " + "#{$board.get_cell(2).piece}"
 	    puts "---------"
-	    puts "#{@board.getCell(3).piece}" + " | " + "#{@board.getCell(4).piece}" + " | " + "#{@board.getCell(5).piece}"
+	    puts "#{$board.get_cell(3).piece}" + " | " + "#{$board.get_cell(4).piece}" + " | " + "#{$board.get_cell(5).piece}"
 	    puts "---------"
-	    puts "#{@board.getCell(6).piece}" + " | " + "#{@board.getCell(7).piece}" + " | " + "#{@board.getCell(8).piece}"
+	    puts "#{$board.get_cell(6).piece}" + " | " + "#{$board.get_cell(7).piece}" + " | " + "#{$board.get_cell(8).piece}"
 	  end
 
   	def play
-  		puts "New game!" + "\n" + "POSITIONS DIAGRAM: "
+  		puts "LET'S PLAY TIC TAC TOE!" + "\n" + "Positions diagram: "
 	    puts " 0 | 1 | 2 "
 	    puts "-----------"
 	    puts " 3 | 4 | 5 "
 	    puts "-----------"
 	    puts " 6 | 7 | 8 "
-  		9.times do
-        if board.gameOver == :winner
-          return "#{@currentPlayer.piece}s won."
-        elsif board.gameOver == :tied
-          return "Draw."
+      puts "New game: "
+      9.times do
+  			if $board.game_over == :winner
+          return "#{@current_player.piece}s won."
+        elsif $board.game_over == :tied
+          return "Game ended in a tie."
         end
-  			if @currentPlayer == @human 
-  				humanMove
-  			# else
-  			# 	cpuMove
-  			end
-        putsBoard
-  			nextTurn
+        next_turn
+        if @current_player == $human && @waiting_player == $cpu
+  				human_move
+  			elsif @current_player == $cpu && @waiting_player == $human
+  				cpu_move
+        end
+        puts_board
   		end
   	end
 
-  	def humanMove
+  	def human_move
     	puts "Enter 0-8 to place your O piece:"
     	move = gets.chomp.to_i
-    	if move.between?(0,8) && @board.getCell(move).piece == " "
-	      @humanTaken << move
-	      @board.playPiece(move, @currentPlayer.piece)
-        # return @humanTaken.to_a
+    	if move.between?(0,8) && $board.get_cell(move).piece == " "
+	      $board.play_piece(move, @current_player.piece)
+        return
 	    else
 	      puts "Invalid, try again." + "\n" + "Enter 0-8 to place your O piece:"
-	      humanMove
+	      human_move
 	    end
 		end
 
-		def cpuMove
-			if @board.grid.all?{|cell| cell.piece == " "}
-				# move = rand(0..8)
-        move = 3
-				@board.playPiece(move,@currentPlayer.piece)
-        return @board.grid
-			# else
-			# 	move = @board.findNonLosingMove
-			# 	if @board.getCell(move).piece == " "
-			# 		@board.playPiece(move,"X")
-			# 		puts "Computer just placed an X in position #{move}."
-			# 	else
-			# 		puts "WHOOPS something broke. Restarting game."
-	  #       play
-	  #     end
+		def cpu_move
+    #   total = 0
+    #   $board.grid.each do |cell|
+    #     if cell.piece == " "
+    #       total+=1
+    #     end
+    #   end
+    #   if total == 9
+    #     move = rand(0..8)
+    #   else
+    #     move = $cpu.find_non_losing_move
+    #   end
+    #   $board.play_piece(move, "X")
+    # end
+      
+
+      if $board.grid.all?{|cell| cell.piece == " "}
+				move = rand(0..8)
+				$board.play_piece(move, @current_player.piece)
+        puts "Computer went first: "
+			else
+				move = $cpu.find_non_losing_move
+				if $board.get_cell(move).piece == " "
+					$board.play_piece(move, @current_player.piece)
+					puts "Computer just placed an X in position #{move}."
+				else
+					puts "WHOOPS something broke. Restarting game."
+	        play
+	      end
 			end
+      return
 		end
 
   end
