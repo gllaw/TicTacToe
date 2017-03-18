@@ -10,29 +10,38 @@ module Tictactoe
 		end
 
 		def find_non_losing_move
-      @arr_of_started = Array.new
-      @arr_of_pristine = Array.new
-			$win_patterns.each do |pattern|
-				if find_last_X(pattern)
-          return
-        elsif find_last_O(pattern)
-          return
-        elsif find_started_pattern(pattern)
-          return pick_best_dupe(@arr_of_started)
-        else
-        	find_empty_pattern(pattern)
-          return pick_best_dupe(@arr_of_pristine)
-        end
-			end
-      unless true
-        arr = Array.new   #will be a tied game, just filling up the spaces
+      if priority_position !=false
+        # move = priority_position
+        return move
+      elsif find_started_pattern !=false
+        # move = find_started_pattern
+        return move
+      elsif find_empty_pattern !=false
+        # move = find_empty_pattern
+        return move
+      else #will be a tied game, just filling up the spaces.
+        arr = Array.new   
         $board.grid.each_index do |position|
           if $board.get_cell(position).piece == " "
             arr << position
           end
         end
-        return arr.sample 			
-		  end
+        move = arr.sample
+        return move
+      end
+    end
+
+# ========================== SEPARATED OUT ========================
+    def priority_position
+      $win_patterns.each do |pattern|
+        if find_last_X(pattern)
+          return
+        elsif find_last_O(pattern)
+          return
+        else
+          return false
+        end
+      end
     end
 
 		def find_last_X(pattern)
@@ -57,34 +66,37 @@ module Tictactoe
      	end
     end
 
-    def find_started_pattern(pattern)
-      if pieces_in_pattern(pattern, "X") == 1 && no_placed_O(pattern)
-        @arr_of_started << blank_in_pattern(pattern)
-        @arr_of_started.flatten!
+    def find_started_pattern
+      @arr_of_started = Array.new
+      $win_patterns.each do |pattern|
+        if pieces_in_pattern(pattern, "X") == 1 && no_placed_O(pattern)
+          @arr_of_started << blank_in_pattern(pattern)
+          @arr_of_started.flatten!
+        end
+      end
+      if @arr_of_started.any?
+        return pick_best_dupe(@arr_of_started)
       else
-    	 false
+        false
       end
     end
 
-		def find_empty_pattern(pattern)
-      if pattern.all? {|position| $board.get_cell(position).piece == " "}
-        pattern.each do |position|
-          @arr_of_pristine << position
+		def find_empty_pattern
+      @arr_of_pristine = Array.new
+      $win_patterns.each do |pattern|
+        if pattern.all? {|position| $board.get_cell(position).piece == " "}
+          @arr_of_pristine << blank_in_pattern(pattern)
+          @arr_of_pristine.flatten!
         end
+      end
+      if @arr_of_pristine.any?
+        return pick_best_dupe(@arr_of_pristine)
       else
-  			false
+       false
       end
   	end
 
-	  #   if defined? var
-	  #     return var
-	  #   elsif @arr_of_available.any?
-	  #     # return pick_best_dupe(@arr_of_available)
-	  #   else
-	  #     puts "Oh dear."
-	  #   end
-	  # end
-
+# =========================== HELPERS ============================
 		def pieces_in_pattern(pattern, piece)
 	    total = 0
 	    pattern.each do |position|
@@ -117,7 +129,7 @@ module Tictactoe
 	  end
 
 	  def pick_best_dupe(arr)
-      for i in (4).downto(1)
+      for i in (3).downto(0)
         if arr.detect{|e| arr.count(e) > i}
           return arr.select{|e| arr.count(e) > i}.uniq.sample#.to_i
         end

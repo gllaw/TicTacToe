@@ -93,15 +93,15 @@ module Tictactoe
         puts "Computer went first: "
 			else
 				move = $cpu.find_non_losing_move
-				if $board.get_cell(move).piece == " "
+				if $board.get_cell(move).piece != " "
+          puts "K somehow it found a position that's not open. RESTART."
+          play
+        else
 					$board.play_piece(move, @current_player.piece)
 					puts "Computer just placed an X in position #{move}."
-				else
-					puts "WHOOPS something broke. Restarting game."
-	        play
 	      end
 			end
-      return
+      # return
 		end
 
   end

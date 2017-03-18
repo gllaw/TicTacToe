@@ -18,12 +18,13 @@ module Tictactoe
 			end
     end
 
+# =========================== HELPERS =============================
+
     TestCell = Struct.new(:piece)
     let(:x_cell){TestCell.new("X")}
     let(:o_cell){TestCell.new("O")}
     let(:blank_cell){TestCell.new(" ")}
 
-# =========================== HELPERS =============================
     context "#pieces_in_pattern" do
       it "counts the number of a given piece already in a win_pattern" do
         cpu = Computer.new
@@ -84,40 +85,67 @@ module Tictactoe
         expect(cpu.find_last_O([0,1,2])).to eq 0
       end
     end
+
+    # context "#priority_position" do
+    #   it "returns false if neither player is about to winning" do
+    #   end
+    #   it "returns the position of the last blank in an X win_pattern" do
+    #   end
+    #   it "returns the position of the last blank in an O win_pattern" do
+    #   end
+    # end
     
     context "#find_started_pattern" do
-      it "determines if a pattern has already been started by X but not intruded on by any Os and returns arr_of_available blank[s]" do
+      it "determines if any win_patterns have already been started by X and haven't been intruded on by any Os yet; if none found then returns false" do
         cpu = Computer.new
-        grid = [x_cell, o_cell, blank_cell, blank_cell, o_cell, blank_cell, blank_cell, x_cell, blank_cell]
+        grid = [o_cell, blank_cell, o_cell, blank_cell, o_cell, blank_cell, o_cell, blank_cell, o_cell]
         $board = Board.new(grid: grid)
-        cpu.pieces_in_pattern([0,1,2], "X") == 1
-        cpu.no_placed_O([0,1,2]) == false
-        expect(cpu.find_started_pattern([0,1,2])).to eq false
+        expect(cpu.find_started_pattern).to eq false
       end
-      it "determines if a pattern has already been started by X but not intruded on by any Os and returns arr_of_available blank[s]" do
+      it "determines if any win_patterns have already been started by X and haven't been intruded on by any Os yet; if true then returns an integer" do
         cpu = Computer.new
-        grid = [x_cell, o_cell, blank_cell, blank_cell, o_cell, blank_cell, blank_cell, x_cell, blank_cell]
+        grid = [x_cell, blank_cell, blank_cell, o_cell, o_cell, o_cell, o_cell, o_cell, o_cell]
         $board = Board.new(grid: grid)
-        cpu.pieces_in_pattern([0,3,6], "X") == 1
-        cpu.no_placed_O([0,3,6]) == true
-        expect(cpu.find_started_pattern([0,3,6])).to eq [3,6]
+        pattern = [0,1,2]
+        cpu.find_started_pattern
+        expect(cpu.pieces_in_pattern(pattern, "X")).to eq 1
+        expect(cpu.no_placed_O(pattern)).to eq true
+        expect(cpu.blank_in_pattern(pattern)).to eq [1,2]
+        expect(cpu.arr_of_started).to eq [1,2]
+        expect([1,2].include? cpu.pick_best_dupe(cpu.arr_of_started)).to be true
       end
     end
     
     context "#find_empty_pattern" do
-      it ""
+      it "determines if any win_patterns remain untouched by either player; if none found then returns false" do
+        cpu = Computer.new
+        grid = [x_cell, x_cell, o_cell, blank_cell, o_cell, blank_cell, blank_cell, o_cell, blank_cell]
+        $board = Board.new(grid: grid)
+        expect(cpu.find_empty_pattern).to eq false
+      end
+      it "determines if any win_patterns remain untouched by either player; if true then returns  and returns array of empty positions from that pattern" do
+        cpu = Computer.new
+        grid = [o_cell, blank_cell, o_cell, o_cell, blank_cell, o_cell, o_cell, blank_cell, o_cell]
+        $board = Board.new(grid: grid)
+        pattern = [1,4,7]
+        cpu.find_empty_pattern
+        expect(cpu.pieces_in_pattern(pattern, " ")).to eq 3
+        expect(cpu.blank_in_pattern(pattern)).to eq [1,4,7]
+        expect(cpu.arr_of_pristine).to eq [1,4,7]
+        expect([1,4,7].include? cpu.pick_best_dupe(cpu.arr_of_pristine)).to be true
+      end
     end
 
 # ========================= THE ALBATROSS ===========================
-    # context "#find_non_losing_move" do
-    #   it "returns an integer" do
-#bc it's really up-in-the-air whether "return" will push forward the unspoke var to be useful in game.play .
-    #   end
+#     context "#find_non_losing_move" do
+#       it "returns an integer" do
+# # bc it's really up-in-the-air whether "return" will push forward the unspoke var to be useful in game.play .
+#       end
 
-    #   it "returns an integer from the remaining blank spaces of an inevitably tied game" do
-    #   end
-    # end
-#how to test if it's actually running thru all the win_patterns the way you want it to?
+#       it "returns an integer from the remaining blank spaces of an inevitably tied game" do
+#       end
+#     end
+# # how to test if it's actually running thru all the win_patterns the way you want it to?
 
 	end
 end
