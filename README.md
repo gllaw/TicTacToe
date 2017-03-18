@@ -1,8 +1,6 @@
-Hello, this is for playing Tic Tac Toe against the computer in your console.
+Hello, this is for playing Tic Tac Toe against the computer.
 
-Unfortunately, if I've done things right then you shouldn't be able to win.
-
-My condolences. 
+If I've done things right then you shouldn't be able to win, sorry.
 
 Please have Ruby installed and navigate to this file's directory in your terminal.
 

@@ -10,15 +10,14 @@ module Tictactoe
 		end
 
 		def find_non_losing_move
-      if priority_position !=false
-        # move = priority_position
-        return move
+      if find_last_X !=false
+        return find_last_X
+      elsif find_last_O !=false
+        return find_last_O
       elsif find_started_pattern !=false
-        # move = find_started_pattern
-        return move
+        return find_started_pattern
       elsif find_empty_pattern !=false
-        # move = find_empty_pattern
-        return move
+        return find_empty_pattern
       else #will be a tied game, just filling up the spaces.
         arr = Array.new   
         $board.grid.each_index do |position|
@@ -26,44 +25,45 @@ module Tictactoe
             arr << position
           end
         end
-        move = arr.sample
-        return move
+        return arr.sample
       end
     end
 
 # ========================== SEPARATED OUT ========================
-    def priority_position
-      $win_patterns.each do |pattern|
-        if find_last_X(pattern)
-          return
-        elsif find_last_O(pattern)
-          return
-        else
-          return false
-        end
-      end
-    end
+    # def priority_position
+    #   $win_patterns.each do |pattern|
+    #     if find_last_X(pattern)
+    #       return find_last_X(pattern)
+    #     elsif find_last_O(pattern)
+    #       return find_last_O(pattern)
+    #     else
+    #       return false
+    #     end
+    #   end
+    # end
 
-		def find_last_X(pattern)
-			if pieces_in_pattern(pattern, "X") == 2
-				unless blank_in_pattern(pattern).empty?
-	        var = blank_in_pattern(pattern).join.to_i
-	        return var
-	      end
-	    else
-	    	false
-	    end
+		def find_last_X
+      $win_patterns.each do |pattern|
+  			if pieces_in_pattern(pattern, "X") == 2
+  				unless blank_in_pattern(pattern).empty?
+  	        return blank_in_pattern(pattern).join.to_i
+  	      end
+  	    else
+  	    	false
+  	    end
+      end
 		end
 			
-		def find_last_O(pattern)				
-      if pieces_in_pattern(pattern, "O") == 2
-      	unless blank_in_pattern(pattern).empty?
-          var = blank_in_pattern(pattern).join.to_i
-     			return var
-     		end
-     	else
-     		false
-     	end
+		def find_last_O
+      $win_patterns.each do |pattern|
+        if pieces_in_pattern(pattern, "O") == 2
+        	unless blank_in_pattern(pattern).empty?
+            return blank_in_pattern(pattern).join.to_i
+       		end
+       	else
+       		false
+       	end
+      end
     end
 
     def find_started_pattern
@@ -131,7 +131,7 @@ module Tictactoe
 	  def pick_best_dupe(arr)
       for i in (3).downto(0)
         if arr.detect{|e| arr.count(e) > i}
-          return arr.select{|e| arr.count(e) > i}.uniq.sample#.to_i
+          return arr.select{|e| arr.count(e) > i}.uniq.sample.to_i
         end
       end
     end

@@ -15,7 +15,7 @@ module Tictactoe
   		if rand(1..2) == 1
   			@current_player = $human
   			@waiting_player = $cpu
-  		elsif rand(1..2) == 2
+  		else
   			@current_player = $cpu
   			@waiting_player = $human
   		end
@@ -46,7 +46,8 @@ module Tictactoe
       9.times do
   			if $board.game_over == :winner
           return "#{@current_player.piece}s won."
-        elsif $board.game_over == :tied
+        end
+        if $board.game_over == :tied
           return "Game ended in a tie."
         end
         next_turn

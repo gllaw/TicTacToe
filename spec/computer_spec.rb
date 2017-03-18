@@ -67,33 +67,22 @@ module Tictactoe
     end
 # ========================== SEPARATED OUT ========================
     context "#find_last_X" do
-      it "determines that a pattern has two Xs already and returns the last blank position" do
+      it "finds any pattern that has two Xs already and returns the last blank position" do
         cpu = Computer.new
         grid = [x_cell, blank_cell, blank_cell, blank_cell, blank_cell, blank_cell, blank_cell, blank_cell, x_cell]
         $board = Board.new(grid: grid)
-        expect(cpu.find_last_X([0,4,8])).to eq 4
+        expect(cpu.find_last_X).to eq 4
       end
     end
 
     context "#find_last_O" do
-      it "determines that a pattern has two Os already and returns the last blank position" do
+      it "finds any pattern that has two Os already and returns the last blank position" do
         cpu = Computer.new
         grid = [blank_cell, o_cell, o_cell, blank_cell, blank_cell, blank_cell, blank_cell, blank_cell, blank_cell]
         $board = Board.new(grid: grid)
-        cpu.pieces_in_pattern([0,1,2], "O") == 2
-        cpu.blank_in_pattern([0,1,2]) == [0]
-        expect(cpu.find_last_O([0,1,2])).to eq 0
+        expect(cpu.find_last_O).to eq 0
       end
     end
-
-    # context "#priority_position" do
-    #   it "returns false if neither player is about to winning" do
-    #   end
-    #   it "returns the position of the last blank in an X win_pattern" do
-    #   end
-    #   it "returns the position of the last blank in an O win_pattern" do
-    #   end
-    # end
     
     context "#find_started_pattern" do
       it "determines if any win_patterns have already been started by X and haven't been intruded on by any Os yet; if none found then returns false" do
