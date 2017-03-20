@@ -44,19 +44,20 @@ module Tictactoe
 	    puts " 6 | 7 | 8 "
       puts "New game: "
       9.times do
-  			if $board.game_over == :winner
-          return "#{@current_player.piece}s won."
-        end
-        if $board.game_over == :tied
-          return "Game ended in a tie."
-        end
-        next_turn
         if @current_player == $human && @waiting_player == $cpu
   				human_move
   			elsif @current_player == $cpu && @waiting_player == $human
   				cpu_move
         end
         puts_board
+        if $board.game_over == :winner
+          puts "#{@current_player.piece}s won."
+          return
+        elsif $board.game_over == :tied
+          puts "Game ended in a tie."
+          return
+        end
+        next_turn
   		end
   	end
 
@@ -67,42 +68,26 @@ module Tictactoe
 	      $board.play_piece(move, @current_player.piece)
         return
 	    else
-	      puts "Invalid, try again." + "\n" + "Enter 0-8 to place your O piece:"
+	      puts "Invalid, try again."
 	      human_move
 	    end
 		end
 
 		def cpu_move
-    #   total = 0
-    #   $board.grid.each do |cell|
-    #     if cell.piece == " "
-    #       total+=1
-    #     end
-    #   end
-    #   if total == 9
-    #     move = rand(0..8)
-    #   else
-    #     move = $cpu.find_non_losing_move
-    #   end
-    #   $board.play_piece(move, "X")
-    # end
-      
-
       if $board.grid.all?{|cell| cell.piece == " "}
 				move = rand(0..8)
 				$board.play_piece(move, @current_player.piece)
         puts "Computer went first: "
 			else
 				move = $cpu.find_non_losing_move
-				if $board.get_cell(move).piece != " "
-          puts "K somehow it found a position that's not open. RESTART."
+				if move.nil? || $board.get_cell(move).piece != " "
+          puts "X's attempted move = #{move}, but something broke."
           play
         else
-					$board.play_piece(move, @current_player.piece)
-					puts "Computer just placed an X in position #{move}."
+  				$board.play_piece(move, @current_player.piece)
+  				puts "Computer just placed an X in position #{move}."
 	      end
 			end
-      # return
 		end
 
   end

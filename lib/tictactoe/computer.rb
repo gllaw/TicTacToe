@@ -5,18 +5,16 @@ module Tictactoe
 
 		def initialize(piece = "X")
 			@piece = piece
-      @arr_of_started = Array.new
-      @arr_of_pristine = Array.new
 		end
 
 		def find_non_losing_move
-      if find_last_X !=false
-        return find_last_X
-      elsif find_last_O !=false
-        return find_last_O
-      elsif find_started_pattern !=false
+      @arr_of_started = Array.new
+      @arr_of_pristine = Array.new
+      if priority_position
+        return priority_position
+      elsif find_started_pattern
         return find_started_pattern
-      elsif find_empty_pattern !=false
+      elsif find_empty_pattern
         return find_empty_pattern
       else #will be a tied game, just filling up the spaces.
         arr = Array.new   
@@ -30,23 +28,23 @@ module Tictactoe
     end
 
 # ========================== SEPARATED OUT ========================
-    # def priority_position
-    #   $win_patterns.each do |pattern|
-    #     if find_last_X(pattern)
-    #       return find_last_X(pattern)
-    #     elsif find_last_O(pattern)
-    #       return find_last_O(pattern)
-    #     else
-    #       return false
-    #     end
-    #   end
-    # end
+    def priority_position
+      if find_last_X.any?
+        return find_last_X
+      elsif find_last_O.any?
+        return find_last_O
+      else
+        return false
+      end
+    end
 
 		def find_last_X
       $win_patterns.each do |pattern|
   			if pieces_in_pattern(pattern, "X") == 2
-  				unless blank_in_pattern(pattern).empty?
+  				if blank_in_pattern(pattern).any?
   	        return blank_in_pattern(pattern).join.to_i
+          else
+            false
   	      end
   	    else
   	    	false
@@ -57,8 +55,10 @@ module Tictactoe
 		def find_last_O
       $win_patterns.each do |pattern|
         if pieces_in_pattern(pattern, "O") == 2
-        	unless blank_in_pattern(pattern).empty?
+        	if blank_in_pattern(pattern).any?
             return blank_in_pattern(pattern).join.to_i
+          else
+            false
        		end
        	else
        		false
@@ -67,9 +67,8 @@ module Tictactoe
     end
 
     def find_started_pattern
-      @arr_of_started = Array.new
       $win_patterns.each do |pattern|
-        if pieces_in_pattern(pattern, "X") == 1 && no_placed_O(pattern)
+        if pieces_in_pattern(pattern, "X") >= 1 && no_placed_O(pattern)
           @arr_of_started << blank_in_pattern(pattern)
           @arr_of_started.flatten!
         end
@@ -82,11 +81,11 @@ module Tictactoe
     end
 
 		def find_empty_pattern
-      @arr_of_pristine = Array.new
       $win_patterns.each do |pattern|
         if pattern.all? {|position| $board.get_cell(position).piece == " "}
-          @arr_of_pristine << blank_in_pattern(pattern)
-          @arr_of_pristine.flatten!
+          pattern.each do |position|
+            @arr_of_pristine << position
+          end
         end
       end
       if @arr_of_pristine.any?
@@ -113,7 +112,7 @@ module Tictactoe
 	    arr_of_blanks = Array.new
 	    pattern.each do |position|
 	      if $board.get_cell(position).piece == " "
-	      	arr_of_blanks.push(position)
+	      	arr_of_blanks << position
 	      end
 	    end
 	    return arr_of_blanks

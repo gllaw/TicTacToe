@@ -10,7 +10,7 @@ module Tictactoe
 		end
 
 		def get_cell(position)
-			grid[position]
+			grid[position.to_i]
 		end
 
 		def play_piece(position, piece)
