@@ -10,9 +10,9 @@ module Tictactoe
 		def find_non_losing_move
       @arr_of_started = Array.new
       @arr_of_pristine = Array.new
-      if priority_position
-        return priority_position
-      elsif find_started_pattern
+      # if priority_position
+      #   return priority_position
+      if find_started_pattern
         return find_started_pattern
       elsif find_empty_pattern
         return find_empty_pattern
@@ -42,7 +42,7 @@ module Tictactoe
       $win_patterns.each do |pattern|
   			if pieces_in_pattern(pattern, "X") == 2
   				if blank_in_pattern(pattern).any?
-  	        return blank_in_pattern(pattern).join.to_i
+  	        return blank_in_pattern(pattern).pop.to_i
           else
             false
   	      end
@@ -56,7 +56,7 @@ module Tictactoe
       $win_patterns.each do |pattern|
         if pieces_in_pattern(pattern, "O") == 2
         	if blank_in_pattern(pattern).any?
-            return blank_in_pattern(pattern).join.to_i
+            return blank_in_pattern(pattern).pop.to_i
           else
             false
        		end
